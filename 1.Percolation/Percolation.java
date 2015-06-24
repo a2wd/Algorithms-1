@@ -20,7 +20,7 @@ public class Percolation {
 	public int _gridWidth;											// gridWidth integer to record gid size
 
 	private int xyTo1D(int x, int y) {			// Convert X and Y co-ords to a 1 dimensional array
-		return (x * y) - 1;										// Origin is 1,1
+		return (x * y);												// Origin is 1,1. 0th element is top, max element is bottom
 	}
 
 	private boolean _isValid(int x, int y) {		// Validate an indice
@@ -34,14 +34,16 @@ public class Percolation {
 	}
 
 	public Percolation(int N){              // create N-by-N grid, with all sites blocked
-		int size = N * N;
+		int size = (N * N) + 2;
 		_unionStruct = new WeightedQuickUnionUF(size);
 		_grid = new int[size];
 		_gridWidth = N;
 
-		for(int x=0; x<size; x++) {
+		//Initialise grid with open top/bottom elements
+		for(int x=1; x<size-1; x++) {
 			_grid[x] = 0;
 		}
+		_grid[0] =_grid[size-1] = 1;
 	}
 
 	public void open(int i, int j){         // open site (row i, column j) if it is not open already
@@ -67,6 +69,14 @@ public class Percolation {
 			if(i < _gridWidth && isOpen(i+1, j)) {
 				_unionStruct.union(xy1D, xyTo1D(i+1, j));
 			}
+
+			//Fill from top to bottom
+			if(i == 1) {
+				_unionStruct.union(xy1D, 0);
+			}
+			if(i == (_gridWidth*_gridWidth)) {
+				_unionStruct.union(xy1D, (_gridWidth * _gridWidth) + 1);
+			}
 		}
 	}
 
@@ -88,21 +98,35 @@ public class Percolation {
 			throw new IndexOutOfBoundsException("Invalid index");
 		}
 
-		return false;
+		if(_unionStruct.connected(0,xyTo1D(i,j))){
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	public boolean percolates(){            // does the system percolate?
-		return false;
+		if(_unionStruct.connected(0,(_gridWidth * _gridWidth)+1)){
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	public static void main(String[] args){ // test client (optional)
 		StdOut.println("In main");
 		Percolation p = new Percolation(5);
-		
+
 		StdOut.println("Ready to open paths");
 		p.open(1,1);
 		p.open(1,2);
 		StdOut.println("Ready to check connected");
-		StdOut.println("Connected: " + p._unionStruct.connected(0,1));
+		StdOut.println("Connected: " + p._unionStruct.connected(p.xyTo1D(1,1),p.xyTo1D(1,2)));
+		StdOut.println("Connected to top [1,1]: " + p.isFull(1,1));
+		StdOut.println("Connected to top [1,2]: " + p.isFull(1,2));
+
+		StdOut.println("Not connected to top [2,4]: " + p.isFull(2,4));
 	}
 }
