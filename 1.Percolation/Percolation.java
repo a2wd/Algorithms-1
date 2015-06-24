@@ -19,13 +19,13 @@ public class Percolation {
 	private int[] _grid;												// grid array to track open/closed indices
 	public int _gridWidth;											// gridWidth integer to record gid size
 
-	private int xyTo1D(int x, int y) {			// Convert X and Y co-ords to a 1 dimensional array
-		return (x * y);												// Origin is 1,1. 0th element is top, max element is bottom
+	private int xyTo1D(int i, int j) {			// Convert X and Y co-ords to a 1 dimensional array
+		return (_gridWidth * (j-1))+i;												// Origin is 1,1. 0th element is top, max element is bottom
 	}
 
-	private boolean _isValid(int x, int y) {		// Validate an indice
-		if(x > 0 && y > 0 &&
-				x <= _gridWidth && y <= _gridWidth) {
+	private boolean _isValid(int i, int j) {		// Validate an indice
+		if(i > 0 && j > 0 &&
+				i <= _gridWidth && j <= _gridWidth) {
 			return true;
 				}
 		else {
@@ -74,7 +74,7 @@ public class Percolation {
 			if(i == 1) {
 				_unionStruct.union(xy1D, 0);
 			}
-			if(i == (_gridWidth*_gridWidth)) {
+			if(i == _gridWidth) {
 				_unionStruct.union(xy1D, (_gridWidth * _gridWidth) + 1);
 			}
 		}
