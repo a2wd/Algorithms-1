@@ -16,6 +16,7 @@
 public class Percolation {
 
   private WeightedQuickUnionUF unionStruct;   // WeightedQuickUnionUF object to manage UnionFind operations
+  private WeightedQuickUnionUF backWash;   // WeightedQuickUnionUF object to manage backwash
   private byte[] grid;                       // grid array to track open/closed indices
   private int gridWidth;                      // gridWidth integer to record gid size
 
@@ -25,6 +26,7 @@ public class Percolation {
 
     int size = (N * N) + 2;
     unionStruct = new WeightedQuickUnionUF(size);
+    backWash = new WeightedQuickUnionUF(size);
     grid = new byte[size];
     gridWidth = N;
 
@@ -59,20 +61,25 @@ public class Percolation {
       //Open connections to surrounding cells
       if (i > 1 && isOpen(i - 1, j)) {
         unionStruct.union(xy1D, xyTo1D(i - 1, j));
+        backWash.union(xy1D, xyTo1D(i - 1, j));
       }
       if (j > 1 && isOpen(i, j-1)) {
         unionStruct.union(xy1D, xyTo1D(i, j - 1));
+        backWash.union(xy1D, xyTo1D(i, j - 1));
       }
       if (j < gridWidth && isOpen(i, j + 1)) {
         unionStruct.union(xy1D, xyTo1D(i, j + 1));
+        backWash.union(xy1D, xyTo1D(i, j + 1));
       }
       if (i < gridWidth && isOpen(i + 1, j)) {
         unionStruct.union(xy1D, xyTo1D(i + 1, j));
+        backWash.union(xy1D, xyTo1D(i + 1, j));
       }
 
       //Fill from top to bottom
       if (i == 1) {
         unionStruct.union(xy1D, 0);
+        backWash.union(xy1D, 0);
       }
       if (i == gridWidth) {
         unionStruct.union(xy1D, (gridWidth * gridWidth) + 1);
@@ -97,7 +104,7 @@ public class Percolation {
       throw new IndexOutOfBoundsException("Invalid index");
     }
 
-    if (unionStruct.connected(0, xyTo1D(i, j))) {
+    if (backWash.connected(0, xyTo1D(i, j))) {
       return true;
     }
 
