@@ -15,7 +15,19 @@ import java.util.Comparator;
 public class Point implements Comparable<Point> {
 
     // compare points by slope
-    public final Comparator<Point> SLOPE_ORDER;       // TODO
+    public final Comparator<Point> SLOPE_ORDER = new Comparator<Point>() {
+       public int compare(Point p, Point q) {
+        double slopeToP = slopeTo(p);
+        double slopeToQ = slopeTo(q);
+        
+        if (slopeToP < slopeToQ)
+          return -1;
+        else if (slopeToP > slopeToQ)
+          return 1;
+        
+        return 0; // slopeToP == slopeToQ
+      }
+   };
 
     private final int x;                              // x coordinate
     private final int y;                              // y coordinate
@@ -24,15 +36,7 @@ public class Point implements Comparable<Point> {
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
-				SLOPE_ORDER = new slopeOrder();
     }
-
-		//Comparator class
-		private static class slopeOrder implements Comparator<Point> {
-			public int compare(Point p, Point q) {
-				return 0;
-			}
-		}
 
     // plot this point to standard drawing
     public void draw() {
@@ -46,27 +50,27 @@ public class Point implements Comparable<Point> {
 
     // slope between this point and that point
     public double slopeTo(Point that) {
-			double dy = that.y - this.y;
-			double dx = that.x - this.x;
-			if(dy == 0 && dx == 0)
-				return Double.NEGATIVE_INFINITY;
-			else if(dy == 0)
-				return Double.POSITIVE_INFINITY;
-			else if(dx == 0)
-				return 0.0;
-			else
-				return (dy/dx);
+      double dy = that.y - y;
+      double dx = that.x - x;
+      if (dy == 0 && dx == 0)
+        return Double.NEGATIVE_INFINITY;
+      else if (dy == 0)
+        return 0.0;
+      else if (dx == 0)
+        return Double.POSITIVE_INFINITY;
+      else
+        return (dy/dx);
     }
 
     // is this point lexicographically smaller than that one?
     // comparing y-coordinates and breaking ties by x-coordinates
     public int compareTo(Point that) {
-			if      (this.y < that.y ||
-							(this.y == that.y && this.x < that.x)) return -1;
-			else if (this.y > that.y ||
-							(this.y == that.y && this.x > that.x)) return  1;
-			else 																					 return  0;
-		}
+      if      (this.y < that.y 
+          ||  (this.y == that.y && this.x < that.x)) return -1;
+      else if (this.y > that.y
+          ||  (this.y == that.y && this.x > that.x)) return  1;
+      else                                           return  0;
+    }
 
     // return string representation of this point
     public String toString() {
@@ -75,5 +79,22 @@ public class Point implements Comparable<Point> {
 
     // unit test
     public static void main(String[] args) {
+      StdOut.println("Compare p(10,0) to (0,0)");
+      Point p = new Point(10, 0);
+      Point q = new Point(0, 0);
+      StdOut.println("p.slopeTo(q) = " + p.slopeTo(q));
+
+      Point a = new Point(67, 410);
+      Point b = new Point(23, 299);
+      Point c = new Point(13, 262);
+
+      StdOut.println("Comparing:");
+      StdOut.println("a, " + a.toString());
+      StdOut.println("b, " + b.toString());
+      StdOut.println("c, " + c.toString());
+
+      StdOut.println("a.SLOPE_ORDER.compare(b, c) = " + a.SLOPE_ORDER.compare(b, c));
+      StdOut.println("a.slopeTo(b) = " + a.slopeTo(b));
+      StdOut.println("a.slopeTo(c) = " + a.slopeTo(c));
     }
 }
