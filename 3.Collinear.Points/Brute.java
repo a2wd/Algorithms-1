@@ -77,7 +77,7 @@ public class Brute {
           for (int d = c + 1; d < allCoords.length; d++) {
             double slopeC = allCoords[a].slopeTo(allCoords[d]);
 
-            if(slope == slopeB && slope == slopeC)
+            if (slope == slopeB && slope == slopeC)
               plotter.printPoints(allCoords[a], allCoords[b], allCoords[c], allCoords[d]);
           }
         }

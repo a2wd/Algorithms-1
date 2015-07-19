@@ -3,7 +3,7 @@
  * Email: github@a2wd.com
  *
  * Compilation:  javac Point.java
- * Execution:	 java Point
+ * Execution:
  * Dependencies: StdDraw.java
  *
  * Description: An immutable data type for points in the plane.
