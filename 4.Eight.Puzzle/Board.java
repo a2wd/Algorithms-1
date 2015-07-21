@@ -86,10 +86,11 @@ public class Board {
     if (y == this) return true;
     if (y == null) return false;
     if (y.getClass() != this.getClass()) return false;
-
+    
     //Object-specific check
     Board that = (Board) y;
-    if (that.toString() != this.toString())  return false;
+    if (!that.toString().equals(this.toString()))  return false;
+
 
     //else
     return true;
@@ -177,6 +178,7 @@ outerLoop:
         for (int j = 0; j < N; j++)
             blocks[i][j] = in.readInt();
     Board test = new Board(blocks);
+    Board testCarbonCopy = new Board(blocks);
 
     StdOut.println("Board created from " + args[0]);
     StdOut.println("Board dimension: " + test.dimension());
@@ -191,6 +193,7 @@ outerLoop:
     StdOut.println(twin.toString());
 
     StdOut.println("Equals self: " + test.equals(test));
+    StdOut.println("Equals copy: " + test.equals(testCarbonCopy));
     StdOut.println("Equals twin: " + test.equals(twin));
 
     StdOut.println("\nNeighbours:");
