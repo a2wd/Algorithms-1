@@ -1,5 +1,7 @@
 /* PointSET.java
- * Dependencies: algs4.jar, RectHV.java * Make: javac-algs4 PointSET.java * Usage: java-algs4 PointSET filename.txt
+ * Dependencies: algs4.jar, RectHV.java
+ * Make: javac-algs4 PointSET.java
+ * Usage: java-algs4 PointSET filename.txt
  */
 
 import java.util.TreeSet;
